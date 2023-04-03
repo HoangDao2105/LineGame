@@ -31,8 +31,10 @@ public class MainController : MonoBehaviour
         }
     }
 
+    //Call event by input button type
     private void MainMenu_OnClick(ButtonType btnType)
     {
+        GameState state = null;
         switch (btnType)
         {
             case ButtonType.New:
@@ -41,9 +43,28 @@ public class MainController : MonoBehaviour
             case ButtonType.Quit:
                 Application.Quit();
                 break;
+            case ButtonType.Save:
+                state = new GameState(grid.GetCells(), ui.Points.Points);
+                GameSaver.SaveGame(state);
+                break;
+            case ButtonType.Load:
+                state = GameSaver.LoadGame();
+                if (state != null)
+                {
+                    ui.Points.Points = state.Points;
+                    grid.SetState(state);
+                    ui.MainMenu.Active = false;
+                }
+                else
+                {
+                    Debug.LogError("State is not found!");
+                }
+
+                break;
         }
     }
-
+    
+    //Restart game
     void newGame()
     {
         ui.Points.Points = 0;
@@ -52,6 +73,7 @@ public class MainController : MonoBehaviour
         grid.StartGenerate(ballSpawn);
     }
 
+    //Call envent when ball set destination
     private void Selector_OnSelected(Sphere sphere, Cell cell)
     {
         var spherePos = sphere.transform.position;

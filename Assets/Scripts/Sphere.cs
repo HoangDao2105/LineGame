@@ -23,6 +23,9 @@ public class Sphere : MonoBehaviour
             Destroy(gameObject);
         });
     }
-    
 
+    private void OnCollisionEnter(Collision other)
+    {
+        Destroy(other.gameObject);
+    }
 }
