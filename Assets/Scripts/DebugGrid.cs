@@ -21,6 +21,7 @@ public class DebugGrid : MonoBehaviour
 {
     public const int SIZE = 9;
     [SerializeField]private List<GameObject> queue;
+    [SerializeField]private List<GameObject> queueUI;
     [SerializeField] private List<Vector3> posQueue;
     [SerializeField] private List<CellType> cellTypeQueue;
 
@@ -263,7 +264,7 @@ public class DebugGrid : MonoBehaviour
                 cells[emptyCoords[index].x, emptyCoords[index].y] = CellType.Empty;
             }
         }
-
+        BallsInQueue();
         return count;
     }
     
@@ -432,7 +433,24 @@ public class DebugGrid : MonoBehaviour
             }
         }
     }
-
+    
+    //Add ball to queue UI
+    void BallsInQueue()
+    {
+        foreach (var b in queueUI)
+        {
+            Destroy(b);
+        }
+        queueUI.Clear();
+        int pos = 10;
+        foreach (var b in queue)
+        {
+            GameObject go = Instantiate(b, new Vector3(pos, -0.3f, 2), Quaternion.identity);
+            go.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+            queueUI.Add(go);
+            pos++;
+        }
+    }
     
 }
 
